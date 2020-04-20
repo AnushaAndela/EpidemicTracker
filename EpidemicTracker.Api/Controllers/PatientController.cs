@@ -23,21 +23,21 @@ namespace EpidemicTracker.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(await _patientService.GetAll());
+            return Ok(await _patientService.GetAllAsync());
         }
 
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPatientAsync(int id)
         {
-            return Ok(await _patientService.GetPatient(id));
+            return Ok(await _patientService.GetPatientAsync(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> PostPatientAsync(PatientDto patientdto)
         {
 
-            return Ok(await _patientService.PostPatient(patientdto));
+            return Ok(await _patientService.PostPatientAsync(patientdto));
         }
     }
 }

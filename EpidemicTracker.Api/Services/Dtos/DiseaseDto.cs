@@ -9,5 +9,6 @@ namespace EpidemicTracker.Api.Services.Dtos
     {
         public int DiseaseDtoId { get; set; }
         public string Name { get; set; }
+        //public DiseaseTypeDto diseaseTypeDto { get; set; }
     }
 }

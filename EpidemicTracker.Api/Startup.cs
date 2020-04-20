@@ -27,8 +27,8 @@ namespace EpidemicTracker.Api
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped(typeof(IPatientService), typeof(PatientService));
-            //services.AddScoped(typeof(IHospitalService), typeof(HospitalService));
-            //services.AddScoped(typeof(IDiseaseService), typeof(DiseaseService));
+            services.AddScoped(typeof(IHospitalService), typeof(HospitalService));
+            services.AddScoped(typeof(IDiseaseService), typeof(DiseaseService));
             //services.AddScoped(typeof(ITreatmentService), typeof(TreatmentService));
 
             services.AddCors(options =>
