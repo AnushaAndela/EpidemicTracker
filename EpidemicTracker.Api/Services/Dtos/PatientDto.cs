@@ -13,7 +13,7 @@ namespace EpidemicTracker.Api.Services.Dtos
         public string Gender { get; set; }
         public long Phone { get; set; }
         public long? AadharId { get; set; }
-        public AddressDto Address { get; set; }
-        public OccupationDto Occupation { get; set; }
+        public  List<AddressDto> Addresses { get; set; }
+        public List<OccupationDto> Occupations { get; set; }
     }
 }

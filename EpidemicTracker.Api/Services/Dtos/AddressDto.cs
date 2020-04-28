@@ -9,7 +9,7 @@ namespace EpidemicTracker.Api.Services.Dtos
     {
         public int AddressDtoId { get; set; }
         public string AddressType { get; set; }
-        public int? PatientId { get; set; }
+       
         public string Hno { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
