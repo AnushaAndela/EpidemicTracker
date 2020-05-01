@@ -3,6 +3,7 @@ using EpidemicTracker.Data.Models;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace EpidemicTracker.Api.Services
 {
     public class PatientService : IPatientService
     {
-        private EpidemicTrackerContext _context;
+        private  EpidemicTrackerContext _context;
 
         public PatientService(EpidemicTrackerContext context)
         {
@@ -44,45 +45,32 @@ namespace EpidemicTracker.Api.Services
 
 
                                             }).ToList(),
-                               Occupations=(from o in a.Occupation
-                                            select new OccupationDto()
-                                            {
-                                                Name=o.Name,
-                                                Phone=o.Phone,
-                                                StreetNo=o.StreetNo,
-                                                Area=o.Area,
-                                                City=o.City,
-                                                State=o.State,
-                                                Country=o.Country,
-                                                Pincode=o.Pincode
-                                            }).ToList()
+                               Occupations = (from o in a.Occupation
+                                              select new OccupationDto()
+                                              {
+                                                  Name = o.Name,
+                                                  Phone = o.Phone,
+                                                  StreetNo = o.StreetNo,
+                                                  Area = o.Area,
+                                                  City = o.City,
+                                                  State = o.State,
+                                                  Country = o.Country,
+                                                  Pincode = o.Pincode
+                                              }).ToList(),
+                               Treatments=(from t in a.Treatment
+                                           select new TreatmentDto()
+                                           {
+                                               AdmittedDate=t.AdmittedDate,
+                                               PercentageCure=t.PercentageCure,
+                                               RelievingDate=t.RelievingDate,
+                                               Isfatility=t.Isfatility
+
+                                           }).ToList()
                            };
 
             return patients;
 
-            //var patientsDto = new List<PatientDto>();
-            //var addressDto = new List<AddressDto>();
-
-
-            //var patients = await _context.Patient.Include("Address").ToListAsync();
-            //foreach (var item in patients)
-            //{
-            //    var patientDto = new PatientDto();
-            //    patientDto.PatientDtoId = item.PatientId;
-            //    patientDto.Name = item.Name;
-            //    patientDto.Age = item.Age;
-            //    patientDto.Gender = item.Gender;
-            //    patientDto.AadharId = item.AadharId;
-
-
-            //    patientsDto.Add(patientDto);
-            //}
-            //return patientsDto;
-
-
-            //return await _context.Patient
-            //.Select(x => PatientToDTO(x))
-            //.ToListAsync();
+           
         }
 
         public async Task<PatientDto> GetPatientAsync(int id)
@@ -96,6 +84,46 @@ namespace EpidemicTracker.Api.Services
                 patientDto.Age = patient.Age;
                 patientDto.Gender = patient.Gender;
                 patientDto.AadharId = patient.AadharId;
+                patientDto.Addresses = new List<AddressDto>();
+                foreach (var item in patient.Address)
+                {
+                    var address = new AddressDto();
+                    address.AddressDtoId = item.AddressId;
+                    address.AddressType = item.AddressType;
+                    address.Hno = item.Hno;
+                    address.Street = item.Street;
+                    address.City = item.City;
+                    address.State = item.State;
+                    address.Country = item.Country;
+                    address.Pincode = item.Pincode;
+
+                    patientDto.Addresses.Add(address);
+                }
+                patientDto.Occupations = new List<OccupationDto>();
+                foreach (var item in patient.Occupation)
+                {
+                    var occupation = new OccupationDto();
+                    occupation.Name = item.Name;
+                    occupation.Phone = item.Phone;
+                    occupation.StreetNo = item.StreetNo;
+                    occupation.Area = item.Area;
+                    occupation.City = item.City;
+                    occupation.State = item.State;
+                    occupation.Country = item.Country;
+                    occupation.Pincode = item.Pincode;
+                    patientDto.Occupations.Add(occupation);
+
+                }
+                patientDto.Treatments = new List<TreatmentDto>();
+                foreach (var item in patientDto.Treatments)
+                {
+                    var treatment = new TreatmentDto();
+                    treatment.AdmittedDate = item.AdmittedDate;
+                    treatment.PercentageCure = item.PercentageCure;
+                    treatment.RelievingDate = item.RelievingDate;
+                    treatment.Isfatility = item.Isfatility;
+                }
+
             }
             return patientDto;
             //var patient = await _context.Patient.FindAsync(id);
@@ -103,28 +131,13 @@ namespace EpidemicTracker.Api.Services
 
         }
 
-       // private static PatientDto PatientToDTO(Patient patient) =>
-       //new PatientDto
-       //{
-       //    PatientDtoId = patient.PatientId,
-       //    Name = patient.Name,
-       //    Age = patient.Age,
-       //    Gender = patient.Gender,
-       //    Phone = patient.Phone,
-       //    AadharId = patient.AadharId,
-           
-       //};
+     
 
-
-
-
-
-
-        public async Task<PatientDto> PostPatientAsync(PatientDto patientdto)
+        public async Task PostPatientAsync(PatientDto patientdto)
         {
 
             var patient = new Patient();
-
+            patient.PatientId = patientdto.PatientDtoId;
             patient.Name = patientdto.Name;
             patient.Age = patientdto.Age;
             patient.Gender = patientdto.Gender;
@@ -160,24 +173,21 @@ namespace EpidemicTracker.Api.Services
                 occupation.Pincode = item.Pincode;
                 patient.Occupation.Add(occupation);
             }
-                        
-                
-         
+            patient.Treatment = new List<Treatment>();
+            foreach (var item in patientdto.Treatments)
+            {
+                var treatment = new Treatment();
+                treatment.AdmittedDate = item.AdmittedDate;
+                treatment.PercentageCure = item.PercentageCure;
+                treatment.RelievingDate = item.RelievingDate;
+                treatment.Isfatility = item.Isfatility;
 
+                patient.Treatment.Add(treatment);
+            }
             _context.Patient.Add(patient);
             await _context.SaveChangesAsync();
 
-            var value = new PatientDto
-            {
-                PatientDtoId = patient.PatientId,
-                Name = patient.Name,
-
-                Age = patient.Age,
-                Gender = patient.Gender,
-                Phone = patient.Phone,
-                AadharId = patient.AadharId
-            };
-            return value;
+           
 
         }
 
