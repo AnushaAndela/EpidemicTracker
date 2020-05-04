@@ -45,27 +45,27 @@ namespace EpidemicTracker.Api.Services
 
 
                                             }).ToList(),
-                               Occupations = (from o in a.Occupation
-                                              select new OccupationDto()
-                                              {
-                                                  Name = o.Name,
-                                                  Phone = o.Phone,
-                                                  StreetNo = o.StreetNo,
-                                                  Area = o.Area,
-                                                  City = o.City,
-                                                  State = o.State,
-                                                  Country = o.Country,
-                                                  Pincode = o.Pincode
-                                              }).ToList(),
-                               Treatments=(from t in a.Treatment
-                                           select new TreatmentDto()
-                                           {
-                                               AdmittedDate=t.AdmittedDate,
-                                               PercentageCure=t.PercentageCure,
-                                               RelievingDate=t.RelievingDate,
-                                               Isfatility=t.Isfatility
+                               //Occupations = (from o in a.Occupation
+                               //               select new OccupationDto()
+                               //               {
+                               //                   Name = o.Name,
+                               //                   Phone = o.Phone,
+                               //                   StreetNo = o.StreetNo,
+                               //                   Area = o.Area,
+                               //                   City = o.City,
+                               //                   State = o.State,
+                               //                   Country = o.Country,
+                               //                   Pincode = o.Pincode
+                               //               }).ToList(),
+                               //Treatments=(from t in a.Treatment
+                               //            select new TreatmentDto()
+                               //            {
+                               //                AdmittedDate=t.AdmittedDate,
+                               //                PercentageCure=t.PercentageCure,
+                               //                RelievingDate=t.RelievingDate,
+                               //                Isfatility=t.Isfatility
 
-                                           }).ToList()
+                               //            }).ToList()
                            };
 
             return patients;
@@ -99,30 +99,30 @@ namespace EpidemicTracker.Api.Services
 
                     patientDto.Addresses.Add(address);
                 }
-                patientDto.Occupations = new List<OccupationDto>();
-                foreach (var item in patient.Occupation)
-                {
-                    var occupation = new OccupationDto();
-                    occupation.Name = item.Name;
-                    occupation.Phone = item.Phone;
-                    occupation.StreetNo = item.StreetNo;
-                    occupation.Area = item.Area;
-                    occupation.City = item.City;
-                    occupation.State = item.State;
-                    occupation.Country = item.Country;
-                    occupation.Pincode = item.Pincode;
-                    patientDto.Occupations.Add(occupation);
+                //patientDto.Occupations = new List<OccupationDto>();
+                //foreach (var item in patient.Occupation)
+                //{
+                //    var occupation = new OccupationDto();
+                //    occupation.Name = item.Name;
+                //    occupation.Phone = item.Phone;
+                //    occupation.StreetNo = item.StreetNo;
+                //    occupation.Area = item.Area;
+                //    occupation.City = item.City;
+                //    occupation.State = item.State;
+                //    occupation.Country = item.Country;
+                //    occupation.Pincode = item.Pincode;
+                //    patientDto.Occupations.Add(occupation);
 
-                }
-                patientDto.Treatments = new List<TreatmentDto>();
-                foreach (var item in patientDto.Treatments)
-                {
-                    var treatment = new TreatmentDto();
-                    treatment.AdmittedDate = item.AdmittedDate;
-                    treatment.PercentageCure = item.PercentageCure;
-                    treatment.RelievingDate = item.RelievingDate;
-                    treatment.Isfatility = item.Isfatility;
-                }
+                //}
+                //patientDto.Treatments = new List<TreatmentDto>();
+                //foreach (var item in patientDto.Treatments)
+                //{
+                //    var treatment = new TreatmentDto();
+                //    treatment.AdmittedDate = item.AdmittedDate;
+                //    treatment.PercentageCure = item.PercentageCure;
+                //    treatment.RelievingDate = item.RelievingDate;
+                //    treatment.Isfatility = item.Isfatility;
+                //}
 
             }
             return patientDto;

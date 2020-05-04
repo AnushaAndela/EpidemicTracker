@@ -11,7 +11,7 @@ namespace EpidemicTracker.Api.Services.Dtos
         public DateTime AdmittedDate { get; set; }
         public decimal PercentageCure { get; set; }
         public DateTime? RelievingDate { get; set; }
-        public bool Isfatility { get; set; }
+        public string Isfatility { get; set; }
 
     }
 }

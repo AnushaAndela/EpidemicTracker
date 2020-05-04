@@ -9,7 +9,7 @@ namespace EpidemicTracker.Data.Models
         public DateTime AdmittedDate { get; set; }
         public decimal PercentageCure { get; set; }
         public DateTime? RelievingDate { get; set; }
-        public bool Isfatility { get; set; }
+        public string Isfatility { get; set; }
         public int? PatientId { get; set; }
         public int? DiseaseId { get; set; }
         public int? HospitalId { get; set; }
