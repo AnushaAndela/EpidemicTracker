@@ -1,4 +1,5 @@
 ﻿using EpidemicTracker.Api.Services.Dtos;
+using EpidemicTracker.Api.Transformers;
 using EpidemicTracker.Data.Models;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,18 +15,19 @@ namespace EpidemicTracker.Api.Services
 {
     public class PatientService : IPatientService
     {
-        private  EpidemicTrackerContext _context;
+        private EpidemicTrackerContext _context;
 
         public PatientService(EpidemicTrackerContext context)
         {
             _context = context;
-
         }
 
 
-        public  async Task<IEnumerable<PatientDto>> GetAllAsync()
+        public async Task<IEnumerable<PatientDto>> GetAllAsync()
         {
-            var patients = from a in _context.Patient.Include(a => a.Address).Include(a => a.Occupation)
+            var patients = from a in _context.Patient
+                                        .Include(a => a.Address)
+                                        .Include(a => a.Occupation)
                            select new PatientDto()
                            {
                                Name = a.Name,
@@ -70,7 +72,7 @@ namespace EpidemicTracker.Api.Services
 
             return patients;
 
-           
+
         }
 
         public async Task<PatientDto> GetPatientAsync(int id)
@@ -131,7 +133,7 @@ namespace EpidemicTracker.Api.Services
 
         }
 
-     
+
 
         public async Task PostPatientAsync(PatientDto patientdto)
         {
@@ -145,20 +147,9 @@ namespace EpidemicTracker.Api.Services
             patient.AadharId = patientdto.AadharId;
             patient.Address = new List<Address>();
 
-            foreach (var item in patientdto.Addresses)
-            {
-                var address = new Address();
-                address.AddressId = item.AddressDtoId;
-                address.AddressType = item.AddressType;
-                address.Hno = item.Hno;
-                address.Street = item.Street;
-                address.City = item.City;
-                address.State = item.State;
-                address.Country = item.Country;
-                address.Pincode = item.Pincode;
-                patient.Address.Add(address);
 
-            }
+            patientdto.Addresses.ForEach(addr => patient.Address.Add(addr.ConvertToAddress()));
+
             patient.Occupation = new List<Occupation>();
             foreach (var item in patientdto.Occupations)
             {
@@ -173,6 +164,7 @@ namespace EpidemicTracker.Api.Services
                 occupation.Pincode = item.Pincode;
                 patient.Occupation.Add(occupation);
             }
+
             patient.Treatment = new List<Treatment>();
             foreach (var item in patientdto.Treatments)
             {
@@ -187,7 +179,7 @@ namespace EpidemicTracker.Api.Services
             _context.Patient.Add(patient);
             await _context.SaveChangesAsync();
 
-           
+
 
         }
 
