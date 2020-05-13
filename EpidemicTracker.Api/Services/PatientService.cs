@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
@@ -25,6 +26,61 @@ namespace EpidemicTracker.Api.Services
 
         public async Task<IEnumerable<PatientDto>> GetAllAsync()
         {
+            //var patientsDto = new List<PatientDto>();
+            //var patients = await _context.Patient.ToListAsync();
+            //foreach (var item in patients)
+            //{
+            //    var patientDto = new PatientDto();
+            //    patientDto.PatientDtoId = item.PatientId;
+            //    patientDto.Name = item.Name;
+            //    patientDto.Age = item.Age;
+            //    patientDto.Gender = item.Gender;
+            //    patientDto.Phone = item.Phone;
+            //    patientDto.AadharId = item.AadharId;
+
+            //    patientDto.Addresses = new List<AddressDto>();
+            //    foreach (var add in item.Address)
+            //    {
+            //        var addresses = new AddressDto();
+            //        addresses.AddressDtoId = add.AddressId;
+            //        addresses.AddressType = add.AddressType;
+            //        addresses.Hno = add.Hno;
+            //        addresses.Street = add.Street;
+
+            //        addresses.City = add.City;
+            //        addresses.State = add.State;
+            //        addresses.Country = add.Country;
+            //        addresses.Pincode = add.Pincode;
+            //        patientDto.Addresses.Add(addresses);
+            //    }
+            //    patientDto.Occupations = new List<OccupationDto>();
+            //    foreach (var occ in item.Occupation)
+            //    {
+            //        var occupations = new OccupationDto();
+            //        occupations.OccupationDtoId = occ.OccupationId;
+            //        occupations.Name = occ.Name;
+            //        occupations.Area = occ.Area;
+            //        occupations.City = occ.City;
+            //        occupations.State = occ.State;
+            //        occupations.Country = occ.Country;
+            //        occupations.Pincode = occ.Pincode;
+            //        patientDto.Occupations.Add(occupations);
+            //    }
+            //    patientDto.Treatments = new List<TreatmentDto>();
+            //    foreach (var treat in item.Treatment)
+            //    {
+            //        var treatments = new TreatmentDto();
+            //        treatments.TreatmentDtoId = treat.TreatmentId;
+            //        treatments.AdmittedDate = treat.AdmittedDate;
+            //        treatments.PercentageCure = treat.PercentageCure;
+            //        treatments.RelievingDate = treat.RelievingDate;
+            //        treatments.Isfatility = treat.Isfatility;
+            //        patientDto.Treatments.Add(treatments);
+            //    }
+            //    
+            //}
+
+            //return patientsDto;
             var patients = from a in _context.Patient
                                         .Include(a => a.Address)
                                         .Include(a => a.Occupation)
@@ -74,7 +130,28 @@ namespace EpidemicTracker.Api.Services
 
 
         }
+        public  List<Patient> GetCuredPatients()
+        {
 
+            //var query = (from p in _context.Patient
+            //             join a in _context.Disease
+            //             on p.PatientId equals a.DiseaseId
+            //             where p.Status == "Cured" && a.Name == "name" select p).ToList();
+            //return query;
+
+            var curedpatients = _context.Patient.Where(p => p.Status == "Cured").ToList();
+            return curedpatients;
+
+
+
+            //if((patients.Where(p=>p.Status=="Cured"))&&(diseases.Where(d=>d.Name=="Name"))
+            //    {
+            //    return GetCuredPatients=
+            //}
+
+            
+
+        }
         public async Task<PatientDto> GetPatientAsync(int id)
         {
             var patientDto = new PatientDto();
@@ -128,9 +205,7 @@ namespace EpidemicTracker.Api.Services
 
             }
             return patientDto;
-            //var patient = await _context.Patient.FindAsync(id);
-            //return PatientToDTO(patient);
-
+           
         }
 
 
@@ -147,6 +222,7 @@ namespace EpidemicTracker.Api.Services
             patient.AadharId = patientdto.AadharId;
             patient.Address = new List<Address>();
 
+           
 
             patientdto.Addresses.ForEach(addr => patient.Address.Add(addr.ConvertToAddress()));
 
@@ -176,6 +252,13 @@ namespace EpidemicTracker.Api.Services
 
                 patient.Treatment.Add(treatment);
             }
+
+            Statusenum status = patientdto.Status;
+            string str = status.ToString();
+            patient.Status = str;
+
+
+
             _context.Patient.Add(patient);
             await _context.SaveChangesAsync();
 

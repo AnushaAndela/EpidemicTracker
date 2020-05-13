@@ -283,6 +283,10 @@ namespace EpidemicTracker.Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("date");
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .HasColumnName("Status");
+                    
             });
 
             modelBuilder.Entity<Treatment>(entity =>

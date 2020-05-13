@@ -22,6 +22,7 @@ namespace EpidemicTracker.Data.Models
         public DateTime? CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public string Status { get; set; }
 
         public virtual ICollection<Address> Address { get; set; }
         public virtual ICollection<Occupation> Occupation { get; set; }

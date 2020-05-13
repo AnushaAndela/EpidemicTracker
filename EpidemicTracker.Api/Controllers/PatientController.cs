@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using EpidemicTracker.Api.Services;
 using EpidemicTracker.Api.Services.Dtos;
+using EpidemicTracker.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EpidemicTracker.Api.Controllers
@@ -19,19 +21,24 @@ namespace EpidemicTracker.Api.Controllers
         {
             _patientService = patientService;
         }
-
+        
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
             return Ok(await _patientService.GetAllAsync());
         }
-
+        //public IActionResult GetCuredPatients()
+        //{
+        //    return Ok(_patientService.GetCuredPatients());
+        //}
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPatientAsync(int id)
         {
             return Ok(await _patientService.GetPatientAsync(id));
         }
+
+        
 
         [HttpPost]
         public async Task<IActionResult> PostPatientAsync(PatientDto patientdto)
