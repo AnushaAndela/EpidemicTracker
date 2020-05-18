@@ -27,9 +27,11 @@ namespace EpidemicTracker.Api.Controllers
         {
             return Ok(await _patientService.GetAllAsync());
         }
-        //public IActionResult GetCuredPatients()
+        //[HttpGet]
+        //[Route("PatientData")]
+        //public IActionResult GetPatientData(int diseaseId)
         //{
-        //    return Ok(_patientService.GetCuredPatients());
+        //    return Ok(_patientService.GetPatientData(diseaseId));
         //}
 
         [HttpGet("{id}")]

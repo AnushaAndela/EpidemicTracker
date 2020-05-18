@@ -130,28 +130,9 @@ namespace EpidemicTracker.Api.Services
 
 
         }
-        public  List<Patient> GetCuredPatients()
-        {
 
-            //var query = (from p in _context.Patient
-            //             join a in _context.Disease
-            //             on p.PatientId equals a.DiseaseId
-            //             where p.Status == "Cured" && a.Name == "name" select p).ToList();
-            //return query;
+     
 
-            var curedpatients = _context.Patient.Where(p => p.Status == "Cured").ToList();
-            return curedpatients;
-
-
-
-            //if((patients.Where(p=>p.Status=="Cured"))&&(diseases.Where(d=>d.Name=="Name"))
-            //    {
-            //    return GetCuredPatients=
-            //}
-
-            
-
-        }
         public async Task<PatientDto> GetPatientAsync(int id)
         {
             var patientDto = new PatientDto();
@@ -205,7 +186,7 @@ namespace EpidemicTracker.Api.Services
 
             }
             return patientDto;
-           
+
         }
 
 
@@ -222,7 +203,7 @@ namespace EpidemicTracker.Api.Services
             patient.AadharId = patientdto.AadharId;
             patient.Address = new List<Address>();
 
-           
+
 
             patientdto.Addresses.ForEach(addr => patient.Address.Add(addr.ConvertToAddress()));
 
@@ -253,9 +234,7 @@ namespace EpidemicTracker.Api.Services
                 patient.Treatment.Add(treatment);
             }
 
-            Statusenum status = patientdto.Status;
-            string str = status.ToString();
-            patient.Status = str;
+
 
 
 

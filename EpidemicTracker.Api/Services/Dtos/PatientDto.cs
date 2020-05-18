@@ -18,8 +18,8 @@ namespace EpidemicTracker.Api.Services.Dtos
         public long? AadharId { get; set; }
 
         //public bool IsInfected { get; set; }
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Statusenum Status { get; set; }
+        
+       
         public List<AddressDto> Addresses { get; set; }
         public List<OccupationDto> Occupations { get; set; }
         public List<TreatmentDto> Treatments { get; set; }

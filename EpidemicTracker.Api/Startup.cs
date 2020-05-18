@@ -30,6 +30,7 @@ namespace EpidemicTracker.Api
             services.AddScoped(typeof(IHospitalService), typeof(HospitalService));
             services.AddScoped(typeof(IDiseaseService), typeof(DiseaseService));
             services.AddScoped(typeof(IDiseaseTypeService), typeof(DiseaseTypeService));
+            services.AddScoped(typeof(ITreatmentService), typeof(TreatmentService));
 
             //services.AddScoped(typeof(ITreatmentService), typeof(TreatmentService));
 
@@ -48,6 +49,7 @@ namespace EpidemicTracker.Api
             });
 
             services.AddControllers().AddNewtonsoftJson();
+            services.AddMvc();
 
         }
 
@@ -71,8 +73,11 @@ namespace EpidemicTracker.Api
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }
